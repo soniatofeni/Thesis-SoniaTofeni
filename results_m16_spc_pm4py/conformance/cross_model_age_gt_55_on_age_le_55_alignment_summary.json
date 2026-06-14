@@ -1,0 +1,19 @@
+{
+  "trace_count": 5,
+  "mean_trace_fitness": 1.0,
+  "deviations": [
+    {
+      "deviation": "model_move::None",
+      "count": 26
+    }
+  ],
+  "max_time_per_trace_seconds": 5,
+  "max_time_total_seconds": 60,
+  "comparison_type": "cross_model",
+  "observed_log": "age_gt_55",
+  "model": "age_le_55",
+  "alignment_mode": "representative",
+  "source_trace_count": 54,
+  "sample_size_requested": 5,
+  "sample_max_events": 30
+}

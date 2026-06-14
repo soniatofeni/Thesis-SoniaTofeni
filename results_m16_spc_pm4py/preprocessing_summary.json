@@ -1,0 +1,79 @@
+{
+  "input_log": "Hospital_log.xes",
+  "diagnosis_filter": "M16",
+  "diagnosis_keys": [
+    "Diagnosis code",
+    "Diagnosis code:1",
+    "Diagnosis code:10",
+    "Diagnosis code:11",
+    "Diagnosis code:12",
+    "Diagnosis code:13",
+    "Diagnosis code:14",
+    "Diagnosis code:15",
+    "Diagnosis code:2",
+    "Diagnosis code:3",
+    "Diagnosis code:4",
+    "Diagnosis code:5",
+    "Diagnosis code:6",
+    "Diagnosis code:7",
+    "Diagnosis code:8",
+    "Diagnosis code:9"
+  ],
+  "age_keys": [
+    "Age",
+    "Age:1",
+    "Age:2",
+    "Age:3",
+    "Age:4",
+    "Age:5"
+  ],
+  "age_assignment": "first numeric Age* attribute in sorted key order",
+  "age_cutoff": 55,
+  "length_filter": [
+    6,
+    100
+  ],
+  "all_log": {
+    "traces": 1143,
+    "events": 150291,
+    "min_events": 1,
+    "median_events": 55,
+    "mean_events": 131.49,
+    "max_events": 1814
+  },
+  "m16_before_age_filter": 235,
+  "m16_excluded_missing_age": 0,
+  "m16_inconsistent_age_trace_count": 98,
+  "age_le_raw": {
+    "traces": 98,
+    "events": 13325,
+    "min_events": 1,
+    "median_events": 53.5,
+    "mean_events": 135.97,
+    "max_events": 1052
+  },
+  "age_gt_raw": {
+    "traces": 137,
+    "events": 22602,
+    "min_events": 2,
+    "median_events": 100,
+    "mean_events": 164.98,
+    "max_events": 1690
+  },
+  "age_le_after_length_filter": {
+    "traces": 48,
+    "events": 1632,
+    "min_events": 7,
+    "median_events": 26.0,
+    "mean_events": 34,
+    "max_events": 95
+  },
+  "age_gt_after_length_filter": {
+    "traces": 54,
+    "events": 2189,
+    "min_events": 6,
+    "median_events": 32.0,
+    "mean_events": 40.54,
+    "max_events": 100
+  }
+}

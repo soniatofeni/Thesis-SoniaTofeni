@@ -1,0 +1,10 @@
+{
+  "comparison": "age_le_55 vs age_gt_55",
+  "earth_movers_distance": 0.5658154628505401,
+  "emsc_similarity": 0.4341845371494599,
+  "note": "PM4Py returns Earth Mover's Distance over stochastic languages; similarity is reported as 1 - distance.",
+  "language_sizes": {
+    "age_le_55": 48,
+    "age_gt_55": 53
+  }
+}

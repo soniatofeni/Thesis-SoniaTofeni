@@ -1,0 +1,453 @@
+Target LLM: Claude Sonnet 4.6
+
+You are an expert in process mining, conformance checking, and subpopulation process comparison.
+
+I am writing a thesis titled:
+"Using Large Language Models to Support the Evaluation of Subpopulation Process Comparison Techniques in Process Mining".
+
+The process-mining analysis compares two M16 diagnosis-code subpopulations from the BPI Challenge 2011 hospital log:
+1. patients aged <=55
+2. patients aged >55
+
+Please interpret the provided outputs as an expert process-mining analyst.
+
+Return the answer in this structure:
+1. Dataset and preprocessing interpretation
+2. Token-based replay interpretation
+3. Alignment-based conformance interpretation
+4. Process variant comparison interpretation
+5. EMSC / stochastic comparison interpretation
+6. Overall comparison between the two subpopulations
+7. Limitations and cautions
+
+Important constraints:
+- Interpret only the provided process-mining outputs.
+- Do not claim that older patients received better or worse care.
+- Do not infer clinical causality.
+- Clearly distinguish between conformance results, variant results, and stochastic comparison results.
+- Explain why high conformance fitness can coexist with low stochastic similarity.
+- Mention that representative alignments are sample-based, not full-log alignments.
+- Mention data-quality limitations where relevant.
+- Treat cross-model conformance as the main SPC conformance comparison, because it replays one subpopulation log on the other subpopulation's model.
+
+
+PROCESS MINING OUTPUTS:
+{
+  "metrics_summary.csv": {
+    "columns": [
+      "comparison_type",
+      "observed_log",
+      "model",
+      "traces",
+      "events",
+      "min_events",
+      "median_events",
+      "mean_events",
+      "max_events",
+      "alignment_mean_trace_fitness",
+      "token_replay_mean_trace_fitness",
+      "token_replay_fit_trace_count"
+    ],
+    "row_count": 2,
+    "included_rows": 2,
+    "rows": [
+      {
+        "comparison_type": "cross_model",
+        "observed_log": "age_gt_55",
+        "model": "age_le_55",
+        "traces": "54",
+        "events": "2189",
+        "min_events": "6",
+        "median_events": "32.0",
+        "mean_events": "40.54",
+        "max_events": "100",
+        "alignment_mean_trace_fitness": "1.0",
+        "token_replay_mean_trace_fitness": "0.9649",
+        "token_replay_fit_trace_count": "14"
+      },
+      {
+        "comparison_type": "cross_model",
+        "observed_log": "age_le_55",
+        "model": "age_gt_55",
+        "traces": "48",
+        "events": "1632",
+        "min_events": "7",
+        "median_events": "26.0",
+        "mean_events": "34",
+        "max_events": "95",
+        "alignment_mean_trace_fitness": "1.0",
+        "token_replay_mean_trace_fitness": "0.984344",
+        "token_replay_fit_trace_count": "18"
+      }
+    ]
+  },
+  "cross_model_metrics_summary.csv": {
+    "columns": [
+      "comparison_type",
+      "observed_log",
+      "model",
+      "traces",
+      "events",
+      "min_events",
+      "median_events",
+      "mean_events",
+      "max_events",
+      "alignment_mean_trace_fitness",
+      "token_replay_mean_trace_fitness",
+      "token_replay_fit_trace_count"
+    ],
+    "row_count": 2,
+    "included_rows": 2,
+    "rows": [
+      {
+        "comparison_type": "cross_model",
+        "observed_log": "age_gt_55",
+        "model": "age_le_55",
+        "traces": "54",
+        "events": "2189",
+        "min_events": "6",
+        "median_events": "32.0",
+        "mean_events": "40.54",
+        "max_events": "100",
+        "alignment_mean_trace_fitness": "1.0",
+        "token_replay_mean_trace_fitness": "0.9649",
+        "token_replay_fit_trace_count": "14"
+      },
+      {
+        "comparison_type": "cross_model",
+        "observed_log": "age_le_55",
+        "model": "age_gt_55",
+        "traces": "48",
+        "events": "1632",
+        "min_events": "7",
+        "median_events": "26.0",
+        "mean_events": "34",
+        "max_events": "95",
+        "alignment_mean_trace_fitness": "1.0",
+        "token_replay_mean_trace_fitness": "0.984344",
+        "token_replay_fit_trace_count": "18"
+      }
+    ]
+  },
+  "preprocessing_summary.json": {
+    "input_log": "Hospital_log.xes",
+    "diagnosis_filter": "M16",
+    "diagnosis_keys": [
+      "Diagnosis code",
+      "Diagnosis code:1",
+      "Diagnosis code:10",
+      "Diagnosis code:11",
+      "Diagnosis code:12",
+      "Diagnosis code:13",
+      "Diagnosis code:14",
+      "Diagnosis code:15",
+      "Diagnosis code:2",
+      "Diagnosis code:3",
+      "Diagnosis code:4",
+      "Diagnosis code:5",
+      "Diagnosis code:6",
+      "Diagnosis code:7",
+      "Diagnosis code:8",
+      "Diagnosis code:9"
+    ],
+    "age_keys": [
+      "Age",
+      "Age:1",
+      "Age:2",
+      "Age:3",
+      "Age:4",
+      "Age:5"
+    ],
+    "age_assignment": "first numeric Age* attribute in sorted key order",
+    "age_cutoff": 55,
+    "length_filter": [
+      6,
+      100
+    ],
+    "all_log": {
+      "traces": 1143,
+      "events": 150291,
+      "min_events": 1,
+      "median_events": 55,
+      "mean_events": 131.49,
+      "max_events": 1814
+    },
+    "m16_before_age_filter": 235,
+    "m16_excluded_missing_age": 0,
+    "m16_inconsistent_age_trace_count": 98,
+    "age_le_raw": {
+      "traces": 98,
+      "events": 13325,
+      "min_events": 1,
+      "median_events": 53.5,
+      "mean_events": 135.97,
+      "max_events": 1052
+    },
+    "age_gt_raw": {
+      "traces": 137,
+      "events": 22602,
+      "min_events": 2,
+      "median_events": 100,
+      "mean_events": 164.98,
+      "max_events": 1690
+    },
+    "age_le_after_length_filter": {
+      "traces": 48,
+      "events": 1632,
+      "min_events": 7,
+      "median_events": 26.0,
+      "mean_events": 34,
+      "max_events": 95
+    },
+    "age_gt_after_length_filter": {
+      "traces": 54,
+      "events": 2189,
+      "min_events": 6,
+      "median_events": 32.0,
+      "mean_events": 40.54,
+      "max_events": 100
+    }
+  },
+  "emsc/emsc_results.json": {
+    "comparison": "age_le_55 vs age_gt_55",
+    "earth_movers_distance": 0.5658154628505401,
+    "emsc_similarity": 0.4341845371494599,
+    "note": "PM4Py returns Earth Mover's Distance over stochastic languages; similarity is reported as 1 - distance.",
+    "language_sizes": {
+      "age_le_55": 48,
+      "age_gt_55": 53
+    }
+  },
+  "conformance/cross_model_age_gt_55_on_age_le_55_token_replay_summary.json": {
+    "trace_count": 54,
+    "fit_trace_count": 14,
+    "mean_trace_fitness": 0.9649,
+    "missing_tokens_by_place": [],
+    "remaining_tokens_by_place": [],
+    "comparison_type": "cross_model",
+    "observed_log": "age_gt_55",
+    "model": "age_le_55"
+  },
+  "conformance/cross_model_age_le_55_on_age_gt_55_token_replay_summary.json": {
+    "trace_count": 48,
+    "fit_trace_count": 18,
+    "mean_trace_fitness": 0.984344,
+    "missing_tokens_by_place": [],
+    "remaining_tokens_by_place": [],
+    "comparison_type": "cross_model",
+    "observed_log": "age_le_55",
+    "model": "age_gt_55"
+  },
+  "conformance/cross_model_age_gt_55_on_age_le_55_alignment_summary.json": {
+    "trace_count": 5,
+    "mean_trace_fitness": 1.0,
+    "deviations": [
+      {
+        "deviation": "model_move::None",
+        "count": 26
+      }
+    ],
+    "max_time_per_trace_seconds": 5,
+    "max_time_total_seconds": 60,
+    "comparison_type": "cross_model",
+    "observed_log": "age_gt_55",
+    "model": "age_le_55",
+    "alignment_mode": "representative",
+    "source_trace_count": 54,
+    "sample_size_requested": 5,
+    "sample_max_events": 30
+  },
+  "conformance/cross_model_age_le_55_on_age_gt_55_alignment_summary.json": {
+    "trace_count": 5,
+    "mean_trace_fitness": 1.0,
+    "deviations": [
+      {
+        "deviation": "model_move::None",
+        "count": 62
+      }
+    ],
+    "max_time_per_trace_seconds": 5,
+    "max_time_total_seconds": 60,
+    "comparison_type": "cross_model",
+    "observed_log": "age_le_55",
+    "model": "age_gt_55",
+    "alignment_mode": "representative",
+    "source_trace_count": 48,
+    "sample_size_requested": 5,
+    "sample_max_events": 30
+  },
+  "variants/top_variants.csv": {
+    "columns": [
+      "group",
+      "rank",
+      "trace_count",
+      "percentage",
+      "variant_length",
+      "variant"
+    ],
+    "row_count": 98,
+    "included_rows": 20,
+    "rows": [
+      {
+        "group": "age_le_55",
+        "rank": "1",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "22",
+        "variant": "inwend.geneesk.  korte kaart kosten-out > aanname laboratoriumonderzoek > urine onderzoek - kwalitatief > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > vervolgconsult poliklinisch > vervolgconsult poliklinisch > inwend.geneesk.   aanv.kaart kosten-out > vervolgconsult poliklinisch > vervolgconsult poliklinisch > vervolgconsult poliklinisch > homocystine chromatografisch > vervolgconsult poliklinisch > vervolgconsult poliklinisch > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > vervolgconsult poliklinisch > vervolgconsult poliklinisch > administratief tarief       - eerste pol > vervolgconsult poliklinisch"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "2",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "17",
+        "variant": "verlosk.-gynaec.   jaarkaart kosten-out > aanname laboratoriumonderzoek > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > telefonisch consult > mammografie thoraxwand > ct abdomen > telefonisch consult > vervolgconsult poliklinisch > administratief tarief       - eerste pol > vervolgconsult poliklinisch > bot - densitometrie lwk > bot - densitometrie femurhals > telefonisch consult > vervolgconsult poliklinisch > administratief tarief       - eerste pol"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "3",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "9",
+        "variant": "vervolgconsult poliklinisch > aanname laboratoriumonderzoek > cea - tumormarker mbv meia > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > verlosk.-gynaec.   jaarkaart kosten-out > vervolgconsult poliklinisch"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "4",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "17",
+        "variant": "telefonisch consult > telefonisch consult > echografie  - genitalia interna > cytologisch onderzoek - ectocervix - > vervolgconsult poliklinisch > administratief tarief       - eerste pol > aanname laboratoriumonderzoek > microscopisch onderzoek - gekleurd en on > bacteriologisch onderzoek met kweek -nie > bacteriologisch onderzoek met kweek -nie > bacteriologisch onderzoek met kweek -nie > bacteriologisch onderzoek met kweek -nie > hepatitis-b surface antigeen confirmatie > hepatitis-b surface antigeen confirmatie > ordertarief > vervolgconsult poliklinisch > telefonisch consult"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "5",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "25",
+        "variant": "ligdagen - alle spec.beh.kinderg.-reval. > hematologie - ontstek.scint.tot.lichaam > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > bloedgroep abo en rhesusfactor > rhesusfactor d - centrifugeermethode - e > haemoglobine foto-electrisch - spoed > leukocyten tellen elektronisch > crp c-reactief proteine > screening antistoffen erytrocyten > bezinkingssnelheid foto-elektrisch > ordertarief > ordertarief > 190021 klinische opname a002 > 190205 klasse 3b        a205 > ligdagen - alle spec.beh.kinderg.-reval. > ovarium     - adnex-extirpatie dmv lapar > histologisch onderzoek - kleine resectie > 190205 klasse 3b        a205 > verlosk.-gynaec.   jaarkaart kosten-out > telefonisch consult > vervolgconsult poliklinisch > administratief tarief       - eerste pol"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "6",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "23",
+        "variant": "aanname laboratoriumonderzoek > cea - tumormarker mbv meia > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > aanname laboratoriumonderzoek > cea - tumormarker mbv meia > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > bot - densitometrie lwk > bot - densitometrie femurhals > telefonisch consult > bot - densitometrie lwk > bot - densitometrie femurhals > telefonisch consult > aanname laboratoriumonderzoek > cea - tumormarker mbv meia > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "7",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "43",
+        "variant": "verlosk.-gynaec.   jaarkaart kosten-out > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > hemoglobine foto-elektrisch > creatinine > vitamine b12 mbv chemieluminescentie > leukocyten tellen elektronisch > trombocyten tellen - elektronisch > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > vervolgconsult poliklinisch > bot - densitometrie lwk > bot - densitometrie femurhals > vervolgconsult poliklinisch > onderzoek van elders niet beoordeeld > telefonisch consult > thorax > vervolgconsult poliklinisch > administratief tarief       - eerste pol > echo nieren-urinewegen > telefonisch consult > vervolgconsult poliklinisch > administratief tarief       - eerste pol > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > hemoglobine foto-elektrisch > creatinine > alkalische fosfatase -kinetisch- > natrium vlamfotometrisch > kalium potentiometrisch > vitamine b12 mbv chemieluminescentie > melkzuurdehydrogenase -ldh- kinetisch > leukocyten tellen elektronisch > trombocyten tellen - elektronisch > gammaglutamyltranspeptidase > ordertarief > vervolgconsult poliklinisch > telefonisch consult > vervolgconsult poliklinisch > mri abdomen > telefonisch consult"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "8",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "29",
+        "variant": "verlosk.-gynaec. korte kaart kosten-out > cytologisch onderzoek - ectocervix - > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > alfa-1-foetoproteine > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > cholesterol totaal > triglyceriden - enzymatisch > melkzuurdehydrogenase -ldh- kinetisch > betasubunit bep. mbv. ria hcg > cholesterol hdl > alfa-1-foetoproteine > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > betasubunit bep. mbv. ria hcg > alfa-1-foetoproteine > ordertarief > ct abdomen > vervolgconsult poliklinisch"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "9",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "27",
+        "variant": "telefonisch consult > verlosk.-gynaec. korte kaart kosten-out > aanname laboratoriumonderzoek > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > verlosk.-gynaec.  aanv.kaart kosten-out > telefonisch consult > telefonisch consult > telefonisch consult > aanname laboratoriumonderzoek > ordertarief > vervolgconsult poliklinisch > telefonisch consult > aanname laboratoriumonderzoek > testosteron mbv radioisotopen > sex-hormone-binding globuline mbv ria > ordertarief > vervolgconsult poliklinisch > telefonisch consult > telefonisch consult > aanname laboratoriumonderzoek > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > mammografie thoraxwand > telefonisch consult"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "10",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "32",
+        "variant": "cytologisch onderzoek - ectocervix - > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > cea - tumormarker mbv meia > alfa-1-foetoproteine > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > betasubunit bep. mbv. ria hcg > cea - tumormarker mbv meia > alfa-1-foetoproteine > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > ct abdomen > telefonisch consult > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > betasubunit bep. mbv. ria hcg > alfa-1-foetoproteine > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "11",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "15",
+        "variant": "verlosk.-gynaec.   jaarkaart kosten-out > aanname laboratoriumonderzoek > ordertarief > vervolgconsult poliklinisch > telefonisch consult > mri abdomen > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > aanname laboratoriumonderzoek > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > telefonisch consult"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "12",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "7",
+        "variant": "verlosk.-gynaec.   jaarkaart kosten-out > vervolgconsult poliklinisch > administratief tarief       - eerste pol > vervolgconsult poliklinisch > administratief tarief       - eerste pol > vervolgconsult poliklinisch > administratief tarief       - eerste pol"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "13",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "18",
+        "variant": "vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > aanname laboratoriumonderzoek > ordertarief > telefonisch consult > telefonisch consult > aanname laboratoriumonderzoek > ordertarief > vervolgconsult poliklinisch > telefonisch consult > ct abdomen > telefonisch consult > aanname laboratoriumonderzoek > ordertarief > telefonisch consult > vervolgconsult poliklinisch > administratief tarief       - eerste pol"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "14",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "19",
+        "variant": "vervolgconsult poliklinisch > administratief tarief       - eerste pol > echografie  - genitalia interna > cytologisch onderzoek - ectocervix - > aanname laboratoriumonderzoek > cea - tumormarker mbv meia > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > echografie  - genitalia interna > aanname laboratoriumonderzoek > cea - tumormarker mbv meia > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "15",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "14",
+        "variant": "vervolgconsult poliklinisch > verlosk.-gynaec.   jaarkaart kosten-out > vervolgconsult poliklinisch > administratief tarief       - eerste pol > aanname laboratoriumonderzoek > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > aanname laboratoriumonderzoek > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "16",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "88",
+        "variant": "verlosk.-gynaec. korte kaart kosten-out > 1e consult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > patient niet verschenen radiologie > coupe ter inzage > cito histologisch onderzoek > telefonisch consult > telefonisch consult > verlosk.-gynaec.  aanv.kaart kosten-out > ct abdomen > telefonisch consult > echografie  - genitalia interna > vervolgconsult poliklinisch > echografie  - genitalia interna > vervolgconsult poliklinisch > thorax > vervolgconsult poliklinisch > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > betasubunit bep. mbv. ria hcg > alfa-1-foetoproteine > ordertarief > ct abdomen > telefonisch consult > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > betasubunit bep. mbv. ria hcg > alfa-1-foetoproteine > ordertarief > vervolgconsult poliklinisch > ct abdomen > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > betasubunit bep. mbv. ria hcg > alfa-1-foetoproteine > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > betasubunit bep. mbv. ria hcg > alfa-1-foetoproteine > ordertarief > vervolgconsult poliklinisch > vervolgconsult poliklinisch > ct abdomen > telefonisch consult > vervolgconsult poliklinisch > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > bilirubine -geconjugeerd > bilirubine - totaal > glucose > hemoglobine foto-elektrisch > creatinine > alkalische fosfatase -kinetisch- > natrium vlamfotometrisch > kalium potentiometrisch > sgot - asat kinetisch > sgpt - alat kinetisch > melkzuurdehydrogenase -ldh- kinetisch > leukocyten tellen elektronisch > gammaglutamyltranspeptidase > calcium > alfa-1-foetoproteine > crp c-reactief proteine > albumine > ordertarief > vervolgconsult poliklinisch > telefonisch consult > telefonisch consult > telefonisch consult > vervolgconsult poliklinisch > telefonisch consult > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > betasubunit bep. mbv. ria hcg > alfa-1-foetoproteine > ordertarief > ct abdomen > vervolgconsult poliklinisch > administratief tarief       - eerste pol"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "17",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "11",
+        "variant": "verlosk.-gynaec.   jaarkaart kosten-out > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > melkzuurdehydrogenase -ldh- kinetisch > betasubunit bep. mbv. ria hcg > alfa-1-foetoproteine > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "18",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "40",
+        "variant": "verlosk.-gynaec. korte kaart kosten-out > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > fsh enzym-immunologisch > lh mbv radioisotopen > progesteron mbv radioisotopen > testosteron mbv radioisotopen > sex-hormone-binding globuline mbv ria > alfa-1-foetoproteine > ordertarief > 1e consult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > vervolgconsult poliklinisch > verlosk.-gynaec.  aanv.kaart kosten-out > echografie  - genitalia interna > vervolgconsult poliklinisch > echografie  - genitalia interna > aanname laboratoriumonderzoek > alfa-1-foetoproteine > ordertarief > vervolgconsult poliklinisch > telefonisch consult > vervolgconsult poliklinisch > administratief tarief       - eerste pol > cytologisch onderzoek - ectocervix - > telefonisch consult > histologisch onderzoek - biopten nno > 1e consult      bezoek > telefonisch consult > cytologisch onderzoek - ectocervix - > aanname laboratoriumonderzoek > aanname laboratoriumonderzoek > hemoglobine foto-elektrisch > tsh enzym-immunologisch > alfa-1-foetoproteine > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "19",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "15",
+        "variant": "verlosk.-gynaec.   jaarkaart kosten-out > aanname laboratoriumonderzoek > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > aanname laboratoriumonderzoek > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > aanname laboratoriumonderzoek > ca-125 mbv meia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol"
+      },
+      {
+        "group": "age_le_55",
+        "rank": "20",
+        "trace_count": "1",
+        "percentage": "2.08",
+        "variant_length": "13",
+        "variant": "verlosk.-gynaec. korte kaart kosten-out > aanname laboratoriumonderzoek > prolactine mbv eia > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > aanname laboratoriumonderzoek > ordertarief > vervolgconsult poliklinisch > administratief tarief       - eerste pol > telefonisch consult > telefonisch consult"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "trace_count": 54,
+  "fit_trace_count": 14,
+  "mean_trace_fitness": 0.9649,
+  "missing_tokens_by_place": [],
+  "remaining_tokens_by_place": [],
+  "comparison_type": "cross_model",
+  "observed_log": "age_gt_55",
+  "model": "age_le_55"
+}

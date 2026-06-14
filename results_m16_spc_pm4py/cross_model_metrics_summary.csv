@@ -1,0 +1,3 @@
+comparison_type,observed_log,model,traces,events,min_events,median_events,mean_events,max_events,alignment_mean_trace_fitness,token_replay_mean_trace_fitness,token_replay_fit_trace_count
+cross_model,age_gt_55,age_le_55,54,2189,6,32.0,40.54,100,1.0,0.9649,14
+cross_model,age_le_55,age_gt_55,48,1632,7,26.0,34,95,1.0,0.984344,18

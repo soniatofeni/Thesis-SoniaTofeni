@@ -1,0 +1,41 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# macOS and editors
+.DS_Store
+.vscode/
+.idea/
+
+# Secrets and local configuration
+.env
+.env.*
+*.key
+
+# Source event logs are not redistributed.
+Hospital_log.xes
+Hospital_log.xes.gz
+DATA.xml
+
+# Scratch runs
+results_m16_spc_pm4py_test/
+results_m16_spc_pm4py_test2/
+
+# Filtered logs can be regenerated and may contain case-level data.
+results_m16_spc_pm4py/filtered_logs/
+results_m16_spc_pm4py/inconsistent_age_traces.json
+results_m16_spc_pm4py/trace_attribute_inventory.csv
+
+# Large or redundant model renderings
+results_m16_spc_pm4py/models/*.png
+results_m16_spc_pm4py/models/*_visualization_error.json
+results_m16_spc_pm4py/readable_visuals/*top_25*
+results_m16_spc_pm4py/readable_visuals/*top_40*
+results_m16_spc_pm4py/readable_visuals/*inductive_miner*
+
+# Per-trace outputs are regenerable; retain aggregate summaries.
+results_m16_spc_pm4py/conformance/*_traces.csv
+
+# Obsolete API failure record
+llm_interpretation_outputs/*_ERROR.json
