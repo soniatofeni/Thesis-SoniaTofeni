@@ -1,9 +1,5 @@
 Target LLM: Claude Sonnet 4.6
 
-You are an expert in process mining, conformance checking, and subpopulation process comparison.
-
-I am writing a thesis titled:
-"Using Large Language Models to Support the Evaluation of Subpopulation Process Comparison Techniques in Process Mining".
 
 The process-mining analysis compares two M16 diagnosis-code subpopulations from the BPI Challenge 2011 hospital log:
 1. patients aged <=55
