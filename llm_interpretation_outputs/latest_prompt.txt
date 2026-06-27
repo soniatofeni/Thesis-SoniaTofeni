@@ -1,4 +1,3 @@
-Target LLM: same prompt for all models
 
 You are an expert in process mining, conformance checking, and subpopulation process comparison.
 
